@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IPL Rating</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            color: white;
+            text-align: center;
+        }
+
+        /* Header */
+
+        header {
+            background: black;
+            padding: 20px;
+            font-size: 34px;
+            letter-spacing: 3px;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        header img {
+            width: 35px;
+            vertical-align: middle;
+        }
+
+        /* Question */
+
+        .question {
+            margin-top: 50px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* Teams */
+
+        .teams {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 70px;
+            flex-wrap: wrap;
+        }
+
+        /* Team cards */
+
+        .team {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 230px;
+            transition: 0.35s;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            border: none;
+            color: white;
+        }
+
+        .team img {
+            width: 130px;
+            margin-bottom: 15px;
+        }
+
+        .team:hover {
+            transform: scale(1.12);
+            background: rgba(255, 255, 255, 0.18);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.9);
+        }
+
+        .team-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Rating table */
+
+        .rating-box {
+            margin-top: 60px;
+        }
+
+        .rating-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .rating-box li {
+            font-size: 18px;
+            margin: 6px;
+        }
+
+        /* Links */
+
+        .links {
+            margin-top: 70px;
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+
+        .links a {
+            text-decoration: none;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            padding: 12px 28px;
+            border-radius: 30px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .links a:hover {
+            transform: scale(1.1);
+        }
+
+        .or-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff512f, #dd2476);
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+            height: fit-content;
+            align-self: center;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px rgba(255, 80, 120, 0.5);
+            }
+
+            to {
+                box-shadow: 0 0 25px rgba(255, 80, 120, 1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        NUMY
+        <img
+            src="https://e7.pngegg.com/pngimages/324/861/png-clipart-pi-icons-logos-emojis-mathematical-signs-thumbnail.png">
+    </header>
+
+    <div class="question">
+        Which team will win today?Click to choose.
+    </div>
+
+    <div class="teams">
+
+        <input type="hidden" name="team1" value="RCB">
+        <input type="hidden" name="team2" value="SRH">
+
+        <button class="team" onclick="vote('RCB','SRH')">
+
+            <img
+                src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Royal_Challengers_Bengaluru_Logo.svg/330px-Royal_Challengers_Bengaluru_Logo.svg.png">
+
+            <div class="team-name">Royal Challengers Bengaluru</div>
+
+        </button>
+
+        <div class="or-box">OR</div>
+
+        <button class="team" onclick="vote('SRH','RCB')">
+
+            <img
+                src="https://upload.wikimedia.org/wikipedia/en/thumb/5/51/Sunrisers_Hyderabad_Logo.svg/250px-Sunrisers_Hyderabad_Logo.svg.png">
+
+            <div class="team-name">Sunrisers Hyderabad</div>
+
+        </button>
+
+    </div>
+
+
+
+    <h2>Current Ratings</h2>
+
+    <div id="ratings">
+
+        RCB : <span id="rcb_rating">{{ ratings["RCB"] }}</span> ⭐
+        <br><br>
+
+        SRH : <span id="srh_rating">{{ ratings["SRH"] }}</span> ⭐
+
+    </div>
+
+
+    <h2><u><span style="color:red">Stay Tuned</span></u></h2>
+    <p>Follow the project, share feedback, and send ideas if you have any on our email- <u>numypie1782@gmail.com</u>.
+
+    <div class="links">
+        <a href="/about.html">ABOUT</a>
+        <a href="/feedback.html">FEEDBACK</a>
+        <a href="/contact.html">CONTACT</a>
+        <a href="/idea.html">IDEA</a>
+
+    </div>
+    <script>
+
+        function vote(team) {
+
+            fetch("/vote", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ team: team })
+            })
+
+                .then(res => res.json())
+                .then(data => {
+
+                    if (data.status == "already_voted") {
+                        alert("⚡ You already voted")
+                        return
+                    }
+
+                    document.getElementById("rcb_rating").innerText = data.ratings.RCB
+                    document.getElementById("srh_rating").innerText = data.ratings.SRH
+
+                    document.getElementById("rcb_votes").innerText = data.clicks.RCB
+                    document.getElementById("srh_votes").innerText = data.clicks.SRH
+
+                })
+
+        }
+
+    </script>
+
+</body>
+
+</html>
