@@ -148,10 +148,28 @@ def stats():
     """
     
 
-@app.route("/reset_vote")
-def reset_vote():
+# CEO RESET SYSTEM
+@app.route("/ceo-reset")
+def ceo_reset():
+
+    global ratings
+    global battles
+    global visitors
+
+    # reset ratings
+    ratings = {
+        "RCB":1500,
+        "SRH":1500
+    }
+
+    # reset stats
+    battles = 0
+    visitors = 0
+
+    # reset votes
     session.clear()
-    return "Vote reset for this browser"    
+
+    return "System Reset Successful ✅"    
 
 
 # -------------------------
